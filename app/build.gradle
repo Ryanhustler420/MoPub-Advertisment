@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "io.raisehand.mopubadvertisment"
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // below needed for moPub integration.
+    // implementation('com.moPub:moPub-sdk:+0@aar')
+    implementation('com.mopub:mopub-sdk:5.12.0@aar') {
+        transitive = true
+    }
+    // below required to solve "Cannot fit requested classes in a single dex file (# methods: 95393 > 65536 ; # fields: 76187 > 65536)" error after adding moPub
+    implementation 'com.android.support:multidex:1.0.3'
+
+}
+
+// below needed for moPub integration
+repositories {
+    google()
+    jcenter()
+    mavenCentral()
+    maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
+}
+
+// below needed to solve "Invoke-customs are only supported starting with Android O (--min-api 26)" error after adding moPub.
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
